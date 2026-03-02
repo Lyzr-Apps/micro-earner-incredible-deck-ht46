@@ -34,9 +34,10 @@
               "amount": { "type": "number" },
               "status": { "type": "string" },
               "date": { "type": "string" },
-              "discrepancy_note": { "type": "string" }
+              "discrepancy_note": { "type": "string" },
+              "payment_setup_url": { "type": "string" }
             },
-            "required": ["transaction_id", "platform", "task_name", "amount", "status", "date", "discrepancy_note"],
+            "required": ["transaction_id", "platform", "task_name", "amount", "status", "date", "discrepancy_note", "payment_setup_url"],
             "additionalProperties": false
           }
         },

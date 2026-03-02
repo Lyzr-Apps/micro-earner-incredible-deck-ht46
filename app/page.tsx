@@ -20,13 +20,14 @@ const EARNINGS_ID = '69a4dfcc7f49e79a462d582a'
 interface Opportunity {
   id: string; platform: string; task_name: string; task_type: string
   payout: number; time_estimate_minutes: number; difficulty: string
-  description: string; rank_score: number; status: string
+  description: string; task_url: string; signup_url: string
+  payment_methods: string; rank_score: number; status: string
 }
 
 interface TaskResult {
   task_id: string; task_name: string; platform: string; status: string
   time_taken_minutes: number; payout: number; error_message: string
-  retryable: boolean; completed_at: string
+  retryable: boolean; task_url: string; completion_tip: string; completed_at: string
 }
 
 interface EarningsSummary {
@@ -37,6 +38,7 @@ interface EarningsSummary {
 interface PaymentEntry {
   transaction_id: string; platform: string; task_name: string
   amount: number; status: string; date: string; discrepancy_note: string
+  payment_setup_url: string
 }
 
 interface DailyTrend { date: string; amount: number }
@@ -87,26 +89,26 @@ class ErrorBoundary extends React.Component<
 
 // --- Sample Data ---
 const SAMPLE_OPPORTUNITIES: Opportunity[] = [
-  { id: 'opp-1', platform: 'Amazon MTurk', task_name: 'Product Image Categorization', task_type: 'data entry', payout: 1.25, time_estimate_minutes: 8, difficulty: 'easy', description: 'Categorize product images into correct departments', rank_score: 92, status: 'available' },
-  { id: 'opp-2', platform: 'Prolific', task_name: 'Consumer Behavior Survey', task_type: 'survey', payout: 3.50, time_estimate_minutes: 15, difficulty: 'medium', description: 'Complete a 15-minute survey about shopping habits', rank_score: 88, status: 'available' },
-  { id: 'opp-3', platform: 'Clickworker', task_name: 'Website Usability Test', task_type: 'survey', payout: 5.00, time_estimate_minutes: 20, difficulty: 'medium', description: 'Test and rate website usability across 5 pages', rank_score: 85, status: 'available' },
-  { id: 'opp-4', platform: 'Swagbucks', task_name: 'Video Ad Verification', task_type: 'click', payout: 0.50, time_estimate_minutes: 3, difficulty: 'easy', description: 'Watch and verify video advertisements', rank_score: 78, status: 'available' },
-  { id: 'opp-5', platform: 'Appen', task_name: 'Audio Transcription Batch', task_type: 'data entry', payout: 4.75, time_estimate_minutes: 25, difficulty: 'hard', description: 'Transcribe short audio clips with timestamps', rank_score: 82, status: 'available' },
+  { id: 'opp-1', platform: 'Amazon MTurk', task_name: 'Product Image Categorization', task_type: 'data entry', payout: 1.25, time_estimate_minutes: 8, difficulty: 'easy', description: 'Categorize product images into correct departments', task_url: 'https://worker.mturk.com/', signup_url: 'https://www.mturk.com/worker', payment_methods: 'Amazon gift card, bank transfer (US)', rank_score: 92, status: 'available' },
+  { id: 'opp-2', platform: 'Prolific', task_name: 'Consumer Behavior Survey', task_type: 'survey', payout: 3.50, time_estimate_minutes: 15, difficulty: 'medium', description: 'Complete a 15-minute survey about shopping habits', task_url: 'https://app.prolific.com/studies', signup_url: 'https://www.prolific.com/participants', payment_methods: 'PayPal, Circle (crypto)', rank_score: 88, status: 'available' },
+  { id: 'opp-3', platform: 'Clickworker', task_name: 'Website Usability Test', task_type: 'survey', payout: 5.00, time_estimate_minutes: 20, difficulty: 'medium', description: 'Test and rate website usability across 5 pages', task_url: 'https://workplace.clickworker.com/', signup_url: 'https://www.clickworker.com/clickworker/', payment_methods: 'PayPal, SEPA bank transfer', rank_score: 85, status: 'available' },
+  { id: 'opp-4', platform: 'Swagbucks', task_name: 'Video Ad Verification', task_type: 'click', payout: 0.50, time_estimate_minutes: 3, difficulty: 'easy', description: 'Watch and verify video advertisements', task_url: 'https://www.swagbucks.com/surveys', signup_url: 'https://www.swagbucks.com/register', payment_methods: 'PayPal, gift cards (Amazon, Visa)', rank_score: 78, status: 'available' },
+  { id: 'opp-5', platform: 'Appen', task_name: 'Audio Transcription Batch', task_type: 'data entry', payout: 4.75, time_estimate_minutes: 25, difficulty: 'hard', description: 'Transcribe short audio clips with timestamps', task_url: 'https://connect.appen.com/qrp/core/vendors/workflows', signup_url: 'https://appen.com/jobs/', payment_methods: 'PayPal, Payoneer', rank_score: 82, status: 'available' },
 ]
 
 const SAMPLE_TASK_RESULTS: TaskResult[] = [
-  { task_id: 'tr-1', task_name: 'Product Image Categorization', platform: 'Amazon MTurk', status: 'completed', time_taken_minutes: 6, payout: 1.25, error_message: '', retryable: false, completed_at: '2026-03-02 10:15' },
-  { task_id: 'tr-2', task_name: 'Consumer Behavior Survey', platform: 'Prolific', status: 'completed', time_taken_minutes: 14, payout: 3.50, error_message: '', retryable: false, completed_at: '2026-03-02 10:35' },
-  { task_id: 'tr-3', task_name: 'Website Usability Test', platform: 'Clickworker', status: 'failed', time_taken_minutes: 5, payout: 0, error_message: 'Session expired before completion', retryable: true, completed_at: '2026-03-02 10:45' },
+  { task_id: 'tr-1', task_name: 'Product Image Categorization', platform: 'Amazon MTurk', status: 'completed', time_taken_minutes: 6, payout: 1.25, error_message: '', retryable: false, task_url: 'https://worker.mturk.com/', completion_tip: 'Use keyboard shortcuts to speed up categorization', completed_at: '2026-03-02 10:15' },
+  { task_id: 'tr-2', task_name: 'Consumer Behavior Survey', platform: 'Prolific', status: 'completed', time_taken_minutes: 14, payout: 3.50, error_message: '', retryable: false, task_url: 'https://app.prolific.com/studies', completion_tip: 'Read questions carefully - Prolific has attention checks', completed_at: '2026-03-02 10:35' },
+  { task_id: 'tr-3', task_name: 'Website Usability Test', platform: 'Clickworker', status: 'failed', time_taken_minutes: 5, payout: 0, error_message: 'Session expired before completion', retryable: true, task_url: 'https://workplace.clickworker.com/', completion_tip: 'Complete usability tests in one session without interruption', completed_at: '2026-03-02 10:45' },
 ]
 
 const SAMPLE_EARNINGS: EarningsSummary = { total_earned: 127.50, earned_this_week: 34.75, earned_this_month: 89.25, total_pending: 12.50, total_failed: 3.00, last_sync: '2026-03-02 11:00' }
 
 const SAMPLE_LEDGER: PaymentEntry[] = [
-  { transaction_id: 'tx-001', platform: 'Amazon MTurk', task_name: 'Image Categorization', amount: 1.25, status: 'paid', date: '2026-03-02', discrepancy_note: '' },
-  { transaction_id: 'tx-002', platform: 'Prolific', task_name: 'Behavior Survey', amount: 3.50, status: 'paid', date: '2026-03-02', discrepancy_note: '' },
-  { transaction_id: 'tx-003', platform: 'Clickworker', task_name: 'Usability Test', amount: 5.00, status: 'pending', date: '2026-03-01', discrepancy_note: '' },
-  { transaction_id: 'tx-004', platform: 'Swagbucks', task_name: 'Video Ads Batch', amount: 2.00, status: 'paid', date: '2026-02-28', discrepancy_note: '' },
+  { transaction_id: 'tx-001', platform: 'Amazon MTurk', task_name: 'Image Categorization', amount: 1.25, status: 'paid', date: '2026-03-02', discrepancy_note: '', payment_setup_url: 'https://www.mturk.com/worker' },
+  { transaction_id: 'tx-002', platform: 'Prolific', task_name: 'Behavior Survey', amount: 3.50, status: 'paid', date: '2026-03-02', discrepancy_note: '', payment_setup_url: 'https://www.prolific.com/participants' },
+  { transaction_id: 'tx-003', platform: 'Clickworker', task_name: 'Usability Test', amount: 5.00, status: 'pending', date: '2026-03-01', discrepancy_note: '', payment_setup_url: 'https://www.clickworker.com/clickworker/' },
+  { transaction_id: 'tx-004', platform: 'Swagbucks', task_name: 'Video Ads Batch', amount: 2.00, status: 'paid', date: '2026-02-28', discrepancy_note: '', payment_setup_url: 'https://www.swagbucks.com/account' },
 ]
 
 const SAMPLE_TREND: DailyTrend[] = [
@@ -209,8 +211,10 @@ export default function Page() {
     setStatusMsg('Scanning for opportunities...')
     addActivity('Opportunity Scout', 'Scan started', 'Scanning platforms for available tasks', 'info')
     try {
-      const prefs = { categories: settings.categories, minPayout: settings.minPayout, maxTime: settings.maxTimePerTask }
-      const result = await callAIAgent(`Scan for available micro-tasks matching these preferences: ${JSON.stringify(prefs)}`, SCOUT_ID)
+      const prefs = { categories: settings.categories, minPayout: settings.minPayout, maxTime: settings.maxTimePerTask, dailyLimit: settings.dailyTaskLimit }
+      const connectedPlatforms = Object.entries(settings.platforms).filter(([, v]) => v.connected).map(([k]) => k)
+      const platformHint = connectedPlatforms.length > 0 ? `Focus on these platforms: ${connectedPlatforms.join(', ')}.` : 'Search all major gig platforms including Prolific, MTurk, Clickworker, Swagbucks, Appen, UserTesting, Respondent, Toloka, Microworkers.'
+      const result = await callAIAgent(`Search the internet for currently available micro-tasks and survey opportunities. ${platformHint} Preferences: minimum payout $${prefs.minPayout}, max time ${prefs.maxTime} minutes per task, categories: ${Object.entries(prefs.categories).filter(([,v]) => v).map(([k]) => k).join(', ')}. Return real task URLs, signup links, and payment method info for each opportunity found.`, SCOUT_ID)
       if (result.success) {
         const data = result?.response?.result
         const opps = Array.isArray(data?.opportunities) ? data.opportunities : []
@@ -243,8 +247,8 @@ export default function Page() {
     setStatusMsg('Executing tasks...')
     addActivity('Task Executor', 'Execution started', `Processing ${toExecute.length} tasks`, 'info')
     try {
-      const taskList = toExecute.map(t => ({ id: t?.id, name: t?.task_name, platform: t?.platform, type: t?.task_type }))
-      const result = await callAIAgent(`Execute these tasks: ${JSON.stringify(taskList)}`, EXECUTOR_ID)
+      const taskList = toExecute.map(t => ({ id: t?.id, name: t?.task_name, platform: t?.platform, type: t?.task_type, task_url: t?.task_url ?? '', payout: t?.payout }))
+      const result = await callAIAgent(`Guide me through completing these tasks. For each task, provide step-by-step completion instructions, tips, the direct task URL, and log the expected result: ${JSON.stringify(taskList)}`, EXECUTOR_ID)
       if (result.success) {
         const data = result?.response?.result
         const results = Array.isArray(data?.task_results) ? data.task_results : []
@@ -272,7 +276,9 @@ export default function Page() {
     setStatusMsg('Syncing earnings...')
     addActivity('Earnings Tracker', 'Sync started', 'Reconciling payments across platforms', 'info')
     try {
-      const result = await callAIAgent('Sync earnings and payment statuses for all connected platforms', EARNINGS_ID)
+      const connectedPlatformsEarnings = Object.entries(settings.platforms).filter(([, v]) => v.connected).map(([k]) => k)
+      const platformList = connectedPlatformsEarnings.length > 0 ? connectedPlatformsEarnings.join(', ') : 'all major gig platforms'
+      const result = await callAIAgent(`Sync earnings and payment statuses for ${platformList}. For each platform, include the payment setup URL so I can configure my payout method. Also provide payment method options (PayPal, bank transfer, gift cards, etc.) and minimum cashout thresholds.`, EARNINGS_ID)
       if (result.success) {
         const data = result?.response?.result
         if (data?.earnings_summary) setEarningsSummary(data.earnings_summary)
@@ -296,7 +302,7 @@ export default function Page() {
   }, [addActivity])
 
   const handleRetryTask = useCallback(async (task: TaskResult) => {
-    const opp: Opportunity = { id: task.task_id, platform: task.platform, task_name: task.task_name, task_type: '', payout: task.payout, time_estimate_minutes: 0, difficulty: '', description: '', rank_score: 0, status: 'available' }
+    const opp: Opportunity = { id: task.task_id, platform: task.platform, task_name: task.task_name, task_type: '', payout: task.payout, time_estimate_minutes: 0, difficulty: '', description: '', task_url: task.task_url ?? '', signup_url: '', payment_methods: '', rank_score: 0, status: 'available' }
     await handleExecuteTasks([opp])
   }, [handleExecuteTasks])
 

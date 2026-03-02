@@ -35,10 +35,13 @@
               "time_estimate_minutes": { "type": "number" },
               "difficulty": { "type": "string" },
               "description": { "type": "string" },
+              "task_url": { "type": "string" },
+              "signup_url": { "type": "string" },
+              "payment_methods": { "type": "string" },
               "rank_score": { "type": "number" },
               "status": { "type": "string" }
             },
-            "required": ["id", "platform", "task_name", "task_type", "payout", "time_estimate_minutes", "difficulty", "description", "rank_score", "status"],
+            "required": ["id", "platform", "task_name", "task_type", "payout", "time_estimate_minutes", "difficulty", "description", "task_url", "signup_url", "payment_methods", "rank_score", "status"],
             "additionalProperties": false
           }
         },

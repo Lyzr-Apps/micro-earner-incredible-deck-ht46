@@ -25,6 +25,7 @@ interface PaymentEntry {
   status: string
   date: string
   discrepancy_note: string
+  payment_setup_url: string
 }
 
 interface DailyTrend {
@@ -174,11 +175,12 @@ export default function EarningsSection({
                       <th className="p-2 text-right font-medium text-muted-foreground">Amount</th>
                       <th className="p-2 text-center font-medium text-muted-foreground">Status</th>
                       <th className="p-2 text-left font-medium text-muted-foreground">TX ID</th>
+                      <th className="p-2 text-center font-medium text-muted-foreground">Payment</th>
                     </tr>
                   </thead>
                   <tbody>
                     {safeLedger.length === 0 ? (
-                      <tr><td colSpan={6} className="p-6 text-center text-muted-foreground">No payment records yet.</td></tr>
+                      <tr><td colSpan={7} className="p-6 text-center text-muted-foreground">No payment records yet.</td></tr>
                     ) : (
                       safeLedger.map((p, i) => (
                         <tr key={p?.transaction_id ?? i} className="border-b border-border/50 hover:bg-muted/20">
@@ -201,6 +203,13 @@ export default function EarningsSection({
                             <Badge variant="outline" className={`text-[10px] px-1.5 py-0 rounded-sm border ${paymentStatusBadge(p?.status ?? '')}`}>{p?.status ?? '-'}</Badge>
                           </td>
                           <td className="p-2 text-[10px] text-muted-foreground font-mono truncate max-w-[80px]">{p?.transaction_id ?? '-'}</td>
+                          <td className="p-2 text-center">
+                            {p?.payment_setup_url ? (
+                              <a href={p.payment_setup_url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline inline-flex items-center gap-0.5">
+                                Setup <RiExternalLinkLine className="w-2.5 h-2.5" />
+                              </a>
+                            ) : '-'}
+                          </td>
                         </tr>
                       ))
                     )}

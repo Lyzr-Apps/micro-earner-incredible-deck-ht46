@@ -17,6 +17,9 @@ interface Opportunity {
   time_estimate_minutes: number
   difficulty: string
   description: string
+  task_url: string
+  signup_url: string
+  payment_methods: string
   rank_score: number
   status: string
 }
@@ -160,27 +163,41 @@ export default function DashboardSection({
             ) : (
               <div className="space-y-1.5">
                 {topOpps.map((opp) => (
-                  <div key={opp?.id ?? Math.random().toString()} className="flex items-center justify-between p-2 bg-muted/40 rounded-sm">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">{opp?.task_name ?? 'Unknown'}</p>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        {(() => {
-                          const url = getPlatformUrl(opp?.platform ?? '')
-                          return url ? (
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
-                              {opp?.platform ?? '-'}<RiExternalLinkLine className="w-2 h-2" />
-                            </a>
-                          ) : (
-                            <span className="text-[10px] text-muted-foreground">{opp?.platform ?? '-'}</span>
-                          )
-                        })()}
-                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><RiTimeLine className="w-2.5 h-2.5" />{opp?.time_estimate_minutes ?? 0}m</span>
+                  <div key={opp?.id ?? Math.random().toString()} className="p-2 bg-muted/40 rounded-sm">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        {opp?.task_url ? (
+                          <a href={opp.task_url} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-primary hover:underline truncate inline-flex items-center gap-0.5">
+                            {opp?.task_name ?? 'Unknown'}<RiExternalLinkLine className="w-2.5 h-2.5 flex-shrink-0" />
+                          </a>
+                        ) : (
+                          <p className="text-xs font-medium truncate">{opp?.task_name ?? 'Unknown'}</p>
+                        )}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {(() => {
+                            const url = getPlatformUrl(opp?.platform ?? '')
+                            return url ? (
+                              <a href={url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
+                                {opp?.platform ?? '-'}<RiExternalLinkLine className="w-2 h-2" />
+                              </a>
+                            ) : (
+                              <span className="text-[10px] text-muted-foreground">{opp?.platform ?? '-'}</span>
+                            )
+                          })()}
+                          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><RiTimeLine className="w-2.5 h-2.5" />{opp?.time_estimate_minutes ?? 0}m</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 ml-2">
+                        <Badge variant="outline" className={`text-[10px] px-1 py-0 rounded-sm border ${difficultyColor(opp?.difficulty ?? '')}`}>{opp?.difficulty ?? '-'}</Badge>
+                        <span className="text-xs font-bold text-green-600">${(opp?.payout ?? 0).toFixed(2)}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5 ml-2">
-                      <Badge variant="outline" className={`text-[10px] px-1 py-0 rounded-sm border ${difficultyColor(opp?.difficulty ?? '')}`}>{opp?.difficulty ?? '-'}</Badge>
-                      <span className="text-xs font-bold text-green-600">${(opp?.payout ?? 0).toFixed(2)}</span>
-                    </div>
+                    {opp?.payment_methods && (
+                      <div className="mt-1 flex items-center gap-1">
+                        <span className="text-[9px] text-muted-foreground">Pay via:</span>
+                        <span className="text-[9px] text-foreground/70">{opp.payment_methods}</span>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

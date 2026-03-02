@@ -19,6 +19,9 @@ interface Opportunity {
   time_estimate_minutes: number
   difficulty: string
   description: string
+  task_url: string
+  signup_url: string
+  payment_methods: string
   rank_score: number
   status: string
 }
@@ -159,12 +162,13 @@ export default function OpportunitiesSection({
                   <th className="p-2 text-center font-medium text-muted-foreground">Difficulty</th>
                   <th className="p-2 text-center font-medium text-muted-foreground">Score</th>
                   <th className="p-2 text-center font-medium text-muted-foreground">Status</th>
+                  <th className="p-2 text-center font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="p-8 text-center text-muted-foreground">
+                    <td colSpan={10} className="p-8 text-center text-muted-foreground">
                       {safeOpps.length === 0 ? 'No opportunities scanned yet. Click "Refresh" to scan.' : 'No tasks match your filters.'}
                     </td>
                   </tr>
@@ -187,8 +191,17 @@ export default function OpportunitiesSection({
                         })()}
                       </td>
                       <td className="p-2 max-w-[200px]">
-                        <p className="font-medium truncate">{opp?.task_name ?? '-'}</p>
+                        {opp?.task_url ? (
+                          <a href={opp.task_url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline truncate inline-flex items-center gap-0.5">
+                            {opp?.task_name ?? '-'}<RiExternalLinkLine className="w-2.5 h-2.5 flex-shrink-0" />
+                          </a>
+                        ) : (
+                          <p className="font-medium truncate">{opp?.task_name ?? '-'}</p>
+                        )}
                         <p className="text-[10px] text-muted-foreground truncate">{opp?.description ?? ''}</p>
+                        {opp?.payment_methods && (
+                          <p className="text-[9px] text-foreground/60 truncate">Pay: {opp.payment_methods}</p>
+                        )}
                       </td>
                       <td className="p-2 capitalize">{opp?.task_type ?? '-'}</td>
                       <td className="p-2 text-right font-bold text-green-600">${(opp?.payout ?? 0).toFixed(2)}</td>
@@ -199,6 +212,20 @@ export default function OpportunitiesSection({
                       <td className="p-2 text-center">{opp?.rank_score ?? 0}</td>
                       <td className="p-2 text-center">
                         <Badge variant="outline" className={`text-[10px] px-1.5 py-0 rounded-sm border ${statusBadge(opp?.status ?? '')}`}>{opp?.status ?? '-'}</Badge>
+                      </td>
+                      <td className="p-2 text-center">
+                        <div className="flex flex-col gap-0.5 items-center">
+                          {opp?.task_url && (
+                            <a href={opp.task_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[10px] text-primary hover:underline font-medium">
+                              Go to Task <RiExternalLinkLine className="w-2.5 h-2.5" />
+                            </a>
+                          )}
+                          {opp?.signup_url && (
+                            <a href={opp.signup_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[10px] text-accent hover:underline">
+                              Sign Up <RiExternalLinkLine className="w-2.5 h-2.5" />
+                            </a>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))

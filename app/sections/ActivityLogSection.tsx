@@ -18,6 +18,8 @@ interface TaskResult {
   payout: number
   error_message: string
   retryable: boolean
+  task_url: string
+  completion_tip: string
   completed_at: string
 }
 
@@ -67,7 +69,8 @@ export default function ActivityLogSection({
     const entries: Array<{
       id: string; timestamp: string; agent: string; platform: string;
       task: string; action: string; result: string; payout: number;
-      status: string; errorMsg: string; retryable: boolean; raw?: TaskResult
+      status: string; errorMsg: string; retryable: boolean; raw?: TaskResult;
+      taskUrl: string; completionTip: string
     }> = []
 
     safeResults.forEach((tr) => {
@@ -84,6 +87,8 @@ export default function ActivityLogSection({
         errorMsg: tr?.error_message ?? '',
         retryable: tr?.retryable ?? false,
         raw: tr,
+        taskUrl: tr?.task_url ?? '',
+        completionTip: tr?.completion_tip ?? '',
       })
     })
 
@@ -100,6 +105,8 @@ export default function ActivityLogSection({
         status: a?.status ?? '',
         errorMsg: a?.detail ?? '',
         retryable: false,
+        taskUrl: '',
+        completionTip: '',
       })
     })
 
@@ -234,6 +241,19 @@ export default function ActivityLogSection({
                               <div><span className="text-muted-foreground">Payout:</span> <span className="font-medium">${entry.payout.toFixed(2)}</span></div>
                               {entry.errorMsg && (
                                 <div className="col-span-2"><span className="text-muted-foreground">Details:</span> <span className="text-red-600">{entry.errorMsg}</span></div>
+                              )}
+                              {entry.taskUrl && (
+                                <div className="col-span-2">
+                                  <span className="text-muted-foreground">Task Link:</span>{' '}
+                                  <a href={entry.taskUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5">
+                                    Open Task <RiExternalLinkLine className="w-2.5 h-2.5" />
+                                  </a>
+                                </div>
+                              )}
+                              {entry.completionTip && (
+                                <div className="col-span-2 bg-blue-50 border border-blue-100 rounded-sm p-1.5">
+                                  <span className="text-muted-foreground">Tip:</span> <span className="text-foreground">{entry.completionTip}</span>
+                                </div>
                               )}
                             </div>
                           </td>

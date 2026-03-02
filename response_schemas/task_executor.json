@@ -37,9 +37,11 @@
               "payout": { "type": "number" },
               "error_message": { "type": "string" },
               "retryable": { "type": "boolean" },
+              "task_url": { "type": "string" },
+              "completion_tip": { "type": "string" },
               "completed_at": { "type": "string" }
             },
-            "required": ["task_id", "task_name", "platform", "status", "time_taken_minutes", "payout", "error_message", "retryable", "completed_at"],
+            "required": ["task_id", "task_name", "platform", "status", "time_taken_minutes", "payout", "error_message", "retryable", "task_url", "completion_tip", "completed_at"],
             "additionalProperties": false
           }
         },
