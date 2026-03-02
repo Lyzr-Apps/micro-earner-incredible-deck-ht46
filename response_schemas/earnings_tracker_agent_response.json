@@ -1,0 +1,82 @@
+{
+  "agent_name": "Earnings Tracker Agent",
+  "agent_id": "69a4dfcc7f49e79a462d582a",
+  "description": "Reconciles completed tasks with payment statuses across all connected platforms, updates the earnings ledger, calculates totals, and flags discrepancies or pending payments",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "earnings_summary": {
+      "total_earned": "number",
+      "earned_this_week": "number",
+      "earned_this_month": "number",
+      "total_pending": "number",
+      "total_failed": "number",
+      "last_sync": "string"
+    },
+    "payment_ledger": [
+      {
+        "transaction_id": "string",
+        "platform": "string",
+        "task_name": "string",
+        "amount": "number",
+        "status": "string",
+        "date": "string",
+        "discrepancy_note": "string"
+      }
+    ],
+    "daily_trend": [
+      {
+        "date": "string",
+        "amount": "number"
+      }
+    ],
+    "discrepancies": [
+      {
+        "task_id": "string",
+        "platform": "string",
+        "issue": "string",
+        "expected_amount": "number",
+        "actual_amount": "number"
+      }
+    ],
+    "message": "string"
+  },
+  "example_response": {
+    "earnings_summary": {
+      "total_earned": 0,
+      "earned_this_week": 0,
+      "earned_this_month": 0,
+      "total_pending": 0,
+      "total_failed": 0,
+      "last_sync": "sample string"
+    },
+    "payment_ledger": [
+      {
+        "transaction_id": "sample string",
+        "platform": "sample string",
+        "task_name": "sample string",
+        "amount": 0,
+        "status": "sample string",
+        "date": "sample string",
+        "discrepancy_note": "sample string"
+      }
+    ],
+    "daily_trend": [
+      {
+        "date": "sample string",
+        "amount": 0
+      }
+    ],
+    "discrepancies": [
+      {
+        "task_id": "sample string",
+        "platform": "sample string",
+        "issue": "sample string",
+        "expected_amount": 0,
+        "actual_amount": 0
+      }
+    ],
+    "message": "sample string"
+  }
+}

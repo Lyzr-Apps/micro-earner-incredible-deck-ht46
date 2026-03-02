@@ -1,0 +1,56 @@
+{
+  "agent_name": "Opportunity Scout Agent",
+  "agent_id": "69a4dfcb5a09117b82f54aed",
+  "description": "Scans micro-task and survey platforms for available opportunities matching user preferences, ranks them by payout and effort, and returns a prioritized list of actionable tasks",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "summary": {
+      "total_found": "number",
+      "filtered_count": "number",
+      "average_payout": "number",
+      "scan_timestamp": "string",
+      "platforms_scanned": "number"
+    },
+    "opportunities": [
+      {
+        "id": "string",
+        "platform": "string",
+        "task_name": "string",
+        "task_type": "string",
+        "payout": "number",
+        "time_estimate_minutes": "number",
+        "difficulty": "string",
+        "description": "string",
+        "rank_score": "number",
+        "status": "string"
+      }
+    ],
+    "message": "string"
+  },
+  "example_response": {
+    "summary": {
+      "total_found": 0,
+      "filtered_count": 0,
+      "average_payout": 0,
+      "scan_timestamp": "sample string",
+      "platforms_scanned": 0
+    },
+    "opportunities": [
+      {
+        "id": "sample string",
+        "platform": "sample string",
+        "task_name": "sample string",
+        "task_type": "sample string",
+        "payout": 0,
+        "time_estimate_minutes": 0,
+        "difficulty": "sample string",
+        "description": "sample string",
+        "rank_score": 0,
+        "status": "sample string"
+      }
+    ],
+    "message": "sample string"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "agents": [
+    {
+      "name": "Opportunity Scout Agent",
+      "agent_id": "69a4dfcb5a09117b82f54aed",
+      "has_schedule": true,
+      "schedule_id": "69a4dfd625d4d77f732fd63a"
+    },
+    {
+      "name": "Task Executor Agent",
+      "agent_id": "69a4dfcbc7ef7478ccec293a",
+      "has_schedule": false
+    },
+    {
+      "name": "Earnings Tracker Agent",
+      "agent_id": "69a4dfcc7f49e79a462d582a",
+      "has_schedule": true,
+      "schedule_id": "69a4dfd625d4d77f732fd63b"
+    }
+  ],
+  "schedules": [
+    {
+      "schedule_id": "69a4dfd625d4d77f732fd63a",
+      "agent_id": "69a4dfcb5a09117b82f54aed",
+      "agent_name": "Opportunity Scout Agent",
+      "cron_expression": "0 */2 * * *",
+      "timezone": "UTC",
+      "message": "Scan all connected gig platforms for new micro-tasks and surveys matching user preferences. Return ranked list of opportunities.",
+      "is_active": false
+    },
+    {
+      "schedule_id": "69a4dfd625d4d77f732fd63b",
+      "agent_id": "69a4dfcc7f49e79a462d582a",
+      "agent_name": "Earnings Tracker Agent",
+      "cron_expression": "0 8 * * *",
+      "timezone": "UTC",
+      "message": "Sync payment statuses across all connected platforms and update earnings ledger with latest transaction data.",
+      "is_active": false
+    }
+  ]
+}

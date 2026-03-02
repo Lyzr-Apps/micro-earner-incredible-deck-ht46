@@ -1,0 +1,52 @@
+{
+  "agent_name": "Task Executor Agent",
+  "agent_id": "69a4dfcbc7ef7478ccec293a",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "schema": {
+    "name": "AgentResponse",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "execution_summary": {
+          "type": "object",
+          "properties": {
+            "total_processed": { "type": "number" },
+            "completed": { "type": "number" },
+            "failed": { "type": "number" },
+            "skipped": { "type": "number" },
+            "estimated_earnings": { "type": "number" },
+            "total_time_minutes": { "type": "number" },
+            "execution_timestamp": { "type": "string" }
+          },
+          "required": ["total_processed", "completed", "failed", "skipped", "estimated_earnings", "total_time_minutes", "execution_timestamp"],
+          "additionalProperties": false
+        },
+        "task_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task_id": { "type": "string" },
+              "task_name": { "type": "string" },
+              "platform": { "type": "string" },
+              "status": { "type": "string" },
+              "time_taken_minutes": { "type": "number" },
+              "payout": { "type": "number" },
+              "error_message": { "type": "string" },
+              "retryable": { "type": "boolean" },
+              "completed_at": { "type": "string" }
+            },
+            "required": ["task_id", "task_name", "platform", "status", "time_taken_minutes", "payout", "error_message", "retryable", "completed_at"],
+            "additionalProperties": false
+          }
+        },
+        "message": { "type": "string" }
+      },
+      "required": ["execution_summary", "task_results", "message"],
+      "additionalProperties": false
+    }
+  }
+}

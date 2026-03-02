@@ -1,0 +1,58 @@
+{
+  "agent_name": "Task Executor Agent",
+  "agent_id": "69a4dfcbc7ef7478ccec293a",
+  "description": "Autonomously completes eligible micro-tasks (surveys, data entry, simple clicks) following platform guidelines and user-defined guardrails, logging each action's status and outcome",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "execution_summary": {
+      "total_processed": "number",
+      "completed": "number",
+      "failed": "number",
+      "skipped": "number",
+      "estimated_earnings": "number",
+      "total_time_minutes": "number",
+      "execution_timestamp": "string"
+    },
+    "task_results": [
+      {
+        "task_id": "string",
+        "task_name": "string",
+        "platform": "string",
+        "status": "string",
+        "time_taken_minutes": "number",
+        "payout": "number",
+        "error_message": "string",
+        "retryable": "boolean",
+        "completed_at": "string"
+      }
+    ],
+    "message": "string"
+  },
+  "example_response": {
+    "execution_summary": {
+      "total_processed": 0,
+      "completed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "estimated_earnings": 0,
+      "total_time_minutes": 0,
+      "execution_timestamp": "sample string"
+    },
+    "task_results": [
+      {
+        "task_id": "sample string",
+        "task_name": "sample string",
+        "platform": "sample string",
+        "status": "sample string",
+        "time_taken_minutes": 0,
+        "payout": 0,
+        "error_message": "sample string",
+        "retryable": false,
+        "completed_at": "sample string"
+      }
+    ],
+    "message": "sample string"
+  }
+}

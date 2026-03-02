@@ -1,0 +1,76 @@
+{
+  "agent_name": "Earnings Tracker Agent",
+  "agent_id": "69a4dfcc7f49e79a462d582a",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "schema": {
+    "name": "AgentResponse",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "earnings_summary": {
+          "type": "object",
+          "properties": {
+            "total_earned": { "type": "number" },
+            "earned_this_week": { "type": "number" },
+            "earned_this_month": { "type": "number" },
+            "total_pending": { "type": "number" },
+            "total_failed": { "type": "number" },
+            "last_sync": { "type": "string" }
+          },
+          "required": ["total_earned", "earned_this_week", "earned_this_month", "total_pending", "total_failed", "last_sync"],
+          "additionalProperties": false
+        },
+        "payment_ledger": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_id": { "type": "string" },
+              "platform": { "type": "string" },
+              "task_name": { "type": "string" },
+              "amount": { "type": "number" },
+              "status": { "type": "string" },
+              "date": { "type": "string" },
+              "discrepancy_note": { "type": "string" }
+            },
+            "required": ["transaction_id", "platform", "task_name", "amount", "status", "date", "discrepancy_note"],
+            "additionalProperties": false
+          }
+        },
+        "daily_trend": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "amount": { "type": "number" }
+            },
+            "required": ["date", "amount"],
+            "additionalProperties": false
+          }
+        },
+        "discrepancies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task_id": { "type": "string" },
+              "platform": { "type": "string" },
+              "issue": { "type": "string" },
+              "expected_amount": { "type": "number" },
+              "actual_amount": { "type": "number" }
+            },
+            "required": ["task_id", "platform", "issue", "expected_amount", "actual_amount"],
+            "additionalProperties": false
+          }
+        },
+        "message": { "type": "string" }
+      },
+      "required": ["earnings_summary", "payment_ledger", "daily_trend", "discrepancies", "message"],
+      "additionalProperties": false
+    }
+  }
+}

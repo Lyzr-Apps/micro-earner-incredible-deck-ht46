@@ -1,0 +1,51 @@
+{
+  "agent_name": "Opportunity Scout Agent",
+  "agent_id": "69a4dfcb5a09117b82f54aed",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "schema": {
+    "name": "AgentResponse",
+    "strict": true,
+    "schema": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "object",
+          "properties": {
+            "total_found": { "type": "number" },
+            "filtered_count": { "type": "number" },
+            "average_payout": { "type": "number" },
+            "scan_timestamp": { "type": "string" },
+            "platforms_scanned": { "type": "number" }
+          },
+          "required": ["total_found", "filtered_count", "average_payout", "scan_timestamp", "platforms_scanned"],
+          "additionalProperties": false
+        },
+        "opportunities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "platform": { "type": "string" },
+              "task_name": { "type": "string" },
+              "task_type": { "type": "string" },
+              "payout": { "type": "number" },
+              "time_estimate_minutes": { "type": "number" },
+              "difficulty": { "type": "string" },
+              "description": { "type": "string" },
+              "rank_score": { "type": "number" },
+              "status": { "type": "string" }
+            },
+            "required": ["id", "platform", "task_name", "task_type", "payout", "time_estimate_minutes", "difficulty", "description", "rank_score", "status"],
+            "additionalProperties": false
+          }
+        },
+        "message": { "type": "string" }
+      },
+      "required": ["summary", "opportunities", "message"],
+      "additionalProperties": false
+    }
+  }
+}
