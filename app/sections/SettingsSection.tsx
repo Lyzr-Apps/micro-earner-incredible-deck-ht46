@@ -8,7 +8,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Slider } from '@/components/ui/slider'
-import { RiSaveLine, RiEyeLine, RiEyeOffLine, RiCheckLine, RiCloseLine, RiPlayLine, RiPauseLine, RiTimeLine } from 'react-icons/ri'
+import { RiSaveLine, RiEyeLine, RiEyeOffLine, RiCheckLine, RiCloseLine, RiPlayLine, RiPauseLine, RiTimeLine, RiExternalLinkLine } from 'react-icons/ri'
+import { getPlatformUrl } from '@/lib/platforms'
 import { listSchedules, pauseSchedule, resumeSchedule, triggerScheduleNow, cronToHuman } from '@/lib/scheduler'
 import type { Schedule } from '@/lib/scheduler'
 
@@ -160,7 +161,18 @@ export default function SettingsSection({ settings, onSaveSettings }: SettingsPr
                 <div key={name} className="flex items-center gap-2 p-2 bg-muted/30 rounded-sm border border-border">
                   <div className={`w-2 h-2 rounded-full flex-shrink-0 ${p.connected ? 'bg-green-500' : 'bg-gray-300'}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium">{name}</p>
+                    <p className="text-xs font-medium">
+                      {(() => {
+                        const url = getPlatformUrl(name)
+                        return url ? (
+                          <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5">
+                            {name}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                          </a>
+                        ) : (
+                          <span>{name}</span>
+                        )
+                      })()}
+                    </p>
                     <div className="flex items-center gap-1 mt-1">
                       <Input
                         type={showKeys[name] ? 'text' : 'password'}

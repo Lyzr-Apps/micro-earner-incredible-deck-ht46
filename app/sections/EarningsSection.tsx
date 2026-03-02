@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { RiRefreshLine, RiAlertLine } from 'react-icons/ri'
+import { RiRefreshLine, RiAlertLine, RiExternalLinkLine } from 'react-icons/ri'
+import { getPlatformUrl } from '@/lib/platforms'
 
 interface EarningsSummary {
   total_earned: number
@@ -182,7 +183,18 @@ export default function EarningsSection({
                       safeLedger.map((p, i) => (
                         <tr key={p?.transaction_id ?? i} className="border-b border-border/50 hover:bg-muted/20">
                           <td className="p-2 whitespace-nowrap">{p?.date ?? '-'}</td>
-                          <td className="p-2">{p?.platform ?? '-'}</td>
+                          <td className="p-2">
+                            {(() => {
+                              const url = getPlatformUrl(p?.platform ?? '')
+                              return url ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5">
+                                  {p?.platform ?? '-'}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                                </a>
+                              ) : (
+                                <span>{p?.platform ?? '-'}</span>
+                              )
+                            })()}
+                          </td>
                           <td className="p-2 max-w-[140px] truncate">{p?.task_name ?? '-'}</td>
                           <td className="p-2 text-right font-bold">${(p?.amount ?? 0).toFixed(2)}</td>
                           <td className="p-2 text-center">
@@ -214,7 +226,16 @@ export default function EarningsSection({
                   {safeDiscrepancies.map((d, i) => (
                     <div key={d?.task_id ?? i} className="p-2 bg-amber-50 border border-amber-200 rounded-sm text-xs">
                       <div className="flex justify-between items-start">
-                        <span className="font-medium">{d?.platform ?? '-'}</span>
+                        {(() => {
+                          const url = getPlatformUrl(d?.platform ?? '')
+                          return url ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline inline-flex items-center gap-0.5">
+                              {d?.platform ?? '-'}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                            </a>
+                          ) : (
+                            <span className="font-medium">{d?.platform ?? '-'}</span>
+                          )
+                        })()}
                         <span className="text-[10px] text-muted-foreground">{d?.task_id ?? ''}</span>
                       </div>
                       <p className="text-[11px] mt-0.5">{d?.issue ?? '-'}</p>

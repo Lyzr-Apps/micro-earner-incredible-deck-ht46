@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { RiSearchLine, RiFilterLine, RiRefreshLine, RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri'
+import { RiSearchLine, RiFilterLine, RiRefreshLine, RiArrowDownSLine, RiArrowUpSLine, RiExternalLinkLine } from 'react-icons/ri'
+import { getPlatformUrl } from '@/lib/platforms'
 
 interface TaskResult {
   task_id: string
@@ -188,7 +189,18 @@ export default function ActivityLogSection({
                         </td>
                         <td className="p-2 whitespace-nowrap">{entry.timestamp || '-'}</td>
                         <td className="p-2 font-medium">{entry.agent}</td>
-                        <td className="p-2">{entry.platform}</td>
+                        <td className="p-2">
+                          {(() => {
+                            const url = getPlatformUrl(entry.platform)
+                            return url ? (
+                              <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
+                                {entry.platform}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                              </a>
+                            ) : (
+                              <span>{entry.platform}</span>
+                            )
+                          })()}
+                        </td>
                         <td className="p-2 max-w-[180px] truncate">{entry.task}</td>
                         <td className="p-2">{entry.action}</td>
                         <td className="p-2 text-center">
@@ -208,7 +220,16 @@ export default function ActivityLogSection({
                           <td colSpan={9} className="p-3">
                             <div className="grid grid-cols-2 gap-2 text-[11px]">
                               <div><span className="text-muted-foreground">Agent:</span> <span className="font-medium">{entry.agent}</span></div>
-                              <div><span className="text-muted-foreground">Platform:</span> <span className="font-medium">{entry.platform}</span></div>
+                              <div><span className="text-muted-foreground">Platform:</span> {(() => {
+                                const url = getPlatformUrl(entry.platform)
+                                return url ? (
+                                  <a href={url} target="_blank" rel="noopener noreferrer" className="font-medium text-primary hover:underline inline-flex items-center gap-0.5">
+                                    {entry.platform}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                                  </a>
+                                ) : (
+                                  <span className="font-medium">{entry.platform}</span>
+                                )
+                              })()}</div>
                               <div><span className="text-muted-foreground">Status:</span> <span className="font-medium">{entry.result}</span></div>
                               <div><span className="text-muted-foreground">Payout:</span> <span className="font-medium">${entry.payout.toFixed(2)}</span></div>
                               {entry.errorMsg && (

@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { RiSearchLine, RiPlayLine, RiRefreshLine, RiTimeLine, RiArrowRightLine } from 'react-icons/ri'
+import { RiSearchLine, RiPlayLine, RiRefreshLine, RiTimeLine, RiArrowRightLine, RiExternalLinkLine } from 'react-icons/ri'
+import { getPlatformUrl } from '@/lib/platforms'
 
 interface Opportunity {
   id: string
@@ -163,7 +164,16 @@ export default function DashboardSection({
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">{opp?.task_name ?? 'Unknown'}</p>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[10px] text-muted-foreground">{opp?.platform ?? '-'}</span>
+                        {(() => {
+                          const url = getPlatformUrl(opp?.platform ?? '')
+                          return url ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-primary hover:underline flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
+                              {opp?.platform ?? '-'}<RiExternalLinkLine className="w-2 h-2" />
+                            </a>
+                          ) : (
+                            <span className="text-[10px] text-muted-foreground">{opp?.platform ?? '-'}</span>
+                          )
+                        })()}
                         <span className="text-[10px] text-muted-foreground flex items-center gap-0.5"><RiTimeLine className="w-2.5 h-2.5" />{opp?.time_estimate_minutes ?? 0}m</span>
                       </div>
                     </div>

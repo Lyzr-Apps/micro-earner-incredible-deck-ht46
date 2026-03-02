@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { RiSearchLine, RiPlayLine, RiRefreshLine, RiFilterLine } from 'react-icons/ri'
+import { RiSearchLine, RiPlayLine, RiRefreshLine, RiFilterLine, RiExternalLinkLine } from 'react-icons/ri'
+import { getPlatformUrl } from '@/lib/platforms'
 
 interface Opportunity {
   id: string
@@ -173,7 +174,18 @@ export default function OpportunitiesSection({
                       <td className="p-2">
                         <Checkbox checked={selected.has(opp?.id ?? '')} onCheckedChange={() => toggleSelect(opp?.id ?? '')} className="rounded-sm" />
                       </td>
-                      <td className="p-2 font-medium">{opp?.platform ?? '-'}</td>
+                      <td className="p-2 font-medium">
+                        {(() => {
+                          const url = getPlatformUrl(opp?.platform ?? '')
+                          return url ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5" onClick={e => e.stopPropagation()}>
+                              {opp?.platform ?? '-'}<RiExternalLinkLine className="w-2.5 h-2.5" />
+                            </a>
+                          ) : (
+                            <span>{opp?.platform ?? '-'}</span>
+                          )
+                        })()}
+                      </td>
                       <td className="p-2 max-w-[200px]">
                         <p className="font-medium truncate">{opp?.task_name ?? '-'}</p>
                         <p className="text-[10px] text-muted-foreground truncate">{opp?.description ?? ''}</p>
